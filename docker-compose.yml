@@ -1,0 +1,37 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+    command: bundle exec puma -C config/puma.rb
+    volumes:
+      - .:/sample
+      - public-data:/sample/public
+      - tmp-data:/sample/tmp
+      - log-data:/sample/log
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '3306:3306'
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+  nginx:
+    build:
+      context: nginx
+    volumes:
+      - public-data:/sample/public
+      - tmp-data:/sample/tmp
+    ports:
+      - 80:80
+    depends_on:
+      - web
+volumes:
+  public-data:
+  tmp-data:
+  log-data:
+  db-data:

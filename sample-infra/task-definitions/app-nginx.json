@@ -1,0 +1,78 @@
+[
+  {
+    "name": "app",
+    "image": "384657981262.dkr.ecr.ap-northeast-1.amazonaws.com/sample-app",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/ecs/sample",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "production"
+      }
+    },
+    "environment": [
+      {
+        "name": "DATABASE_HOST",
+        "value": "sample-db.cbt9oua7na7s.ap-northeast-1.rds.amazonaws.com"
+      },
+      {
+        "name": "DATABASE_NAME",
+        "value": "sample_app_production"
+      },
+      {
+        "name": "DATABASE_PASSWORD",
+        "value": "password"
+      },
+      {
+        "name": "DATABASE_USERNAME",
+        "value": "root"
+      },
+      {
+        "name": "RAILS_ENV",
+        "value": "production"
+      },
+      {
+        "name": "RAILS_MASTER_KEY",
+        "value": "9bd82572171cd7998e2d115f1bcaf350"
+      },
+      {
+        "name": "TZ",
+        "value": "Japan"
+      }
+    ],
+    "command": [
+      "bash",
+      "-c",
+      "bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec puma -C config/puma.rb"
+    ],
+    "workingDirectory": "/sample",
+    "essential": true
+  },
+  {
+    "name": "nginx",
+    "image": "384657981262.dkr.ecr.ap-northeast-1.amazonaws.com/sample-nginx",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "secretOptions": null,
+      "options": {
+        "awslogs-group": "/ecs/sample",
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "production"
+      }
+    },
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": 80
+      }
+    ],
+    "workingDirectory": "/sample",
+    "volumesFrom": [
+      {
+        "sourceContainer": "app",
+        "readOnly": false
+      }
+    ],
+    "essential": true
+  }
+]
