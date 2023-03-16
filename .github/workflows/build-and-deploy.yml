@@ -1,15 +1,53 @@
-name: "Build and Deploy"
-
 on:
-  push:
+  push: # 指定したブランチにpushされた際に実行
+    branches: [ master, develop ]
+
+name: Deploy to Amazon ECS
+
+env:
+  OIDC_ARN: arn:aws:iam::384657981262:role/GithubActionsTestByOIDC
 
 permissions:
   id-token: write
   contents: read
+  pull-requests: write
 
 jobs:
-  build-and-deploy:
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
-      - name: test
-        run: echo "Test!"
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: sample-app # ECRリポジトリ名
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -f ecs/Dockerfile . -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Fill in the new image ID in the Amazon ECS task definition
+      id: task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: ecs/task-definition.json
+        container-name: app # appコンテナを指定
+        image: ${{ steps.build-image.outputs.image }}
+
+    - name: Deploy Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.task-def.outputs.task-definition }}
+        service: sample-service
+        cluster: sample-cluster

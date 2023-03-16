@@ -1,0 +1,159 @@
+{
+  "ipcMode": null,
+  "executionRoleArn": "arn:aws:iam::384657981262:role/ecs-task-role",
+  "containerDefinitions": [
+    {
+      "dnsSearchDomains": null,
+      "environmentFiles": null,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/sample",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "production"
+        }
+      },
+      "entryPoint": null,
+      "portMappings": [],
+      "command": [
+        "bash",
+        "-c",
+        "bundle exec rails db:migrate && bundle exec rails assets:precompile && bundle exec puma -C config/puma.rb"
+      ],
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "DATABASE_HOST",
+          "value": "sample-db.cbt9oua7na7s.ap-northeast-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DATABASE_NAME",
+          "value": "sample_app_production"
+        },
+        {
+          "name": "DATABASE_PASSWORD",
+          "value": "password"
+        },
+        {
+          "name": "DATABASE_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "RAILS_ENV",
+          "value": "production"
+        },
+        {
+          "name": "RAILS_MASTER_KEY",
+          "value": "sample-db.cbt9oua7na7s.ap-northeast-1.rds.amazonaws.com"
+        },
+        {
+          "name": "TZ",
+          "value": "Japan"
+        }
+      ],
+      "resourceRequirements": null,
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [],
+      "workingDirectory": "/sample",
+      "secrets": null,
+      "dockerSecurityOptions": null,
+      "memory": null,
+      "memoryReservation": null,
+      "volumesFrom": [],
+      "stopTimeout": null,
+      "image": "384657981262.dkr.ecr.ap-northeast-1.amazonaws.com/sample-app",
+      "startTimeout": null,
+      "firelensConfiguration": null,
+      "dependsOn": null,
+      "disableNetworking": null,
+      "interactive": null,
+      "healthCheck": null,
+      "essential": true,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "pseudoTerminal": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "systemControls": null,
+      "privileged": null,
+      "name": "app"
+    },
+    {
+      "dnsSearchDomains": null,
+      "environmentFiles": null,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/sample",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "production"
+        }
+      },
+      "entryPoint": null,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 0,
+      "environment": [],
+      "resourceRequirements": null,
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [],
+      "workingDirectory": "/sample",
+      "secrets": null,
+      "dockerSecurityOptions": null,
+      "memory": null,
+      "memoryReservation": null,
+      "volumesFrom": [
+        {
+          "sourceContainer": "app",
+          "readOnly": false
+        }
+      ],
+      "stopTimeout": null,
+      "image": "384657981262.dkr.ecr.ap-northeast-1.amazonaws.com/sample-nginx",
+      "startTimeout": null,
+      "firelensConfiguration": null,
+      "dependsOn": null,
+      "disableNetworking": null,
+      "interactive": null,
+      "healthCheck": null,
+      "essential": true,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "pseudoTerminal": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "systemControls": null,
+      "privileged": null,
+      "name": "nginx"
+    }
+  ],
+  "placementConstraints": [],
+  "memory": "1024",
+  "taskRoleArn": "arn:aws:iam::384657981262:role/ecs-task-role",
+  "family": "sample-app",
+  "pidMode": null,
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "512",
+  "inferenceAccelerators": null,
+  "proxyConfiguration": null,
+  "volumes": []
+}
