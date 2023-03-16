@@ -46,7 +46,7 @@
         },
         {
           "name": "RAILS_MASTER_KEY",
-          "value": "sample-db.cbt9oua7na7s.ap-northeast-1.rds.amazonaws.com"
+          "value": "9bd82572171cd7998e2d115f1bcaf350"
         },
         {
           "name": "TZ",
