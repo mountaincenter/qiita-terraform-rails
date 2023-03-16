@@ -9,3 +9,7 @@ variable "domain_name" {}
 variable "r_prefix" {
   default = "sample"
 }
+
+variable "fqdn_name" {
+  default = "api.ymnk.fun"
+}
