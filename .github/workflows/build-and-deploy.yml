@@ -33,7 +33,7 @@ jobs:
           ${{ runner.os }}-buildx-
 
     - name: Assume Role
-      uses: aws-actions/configure-aws-credentials@v1-node16
+      uses: aws-actions/configure-aws-credentials@v2
       with:
         role-to-assume: ${{ env.OIDC_ARN }}
         aws-region: ap-northeast-1
