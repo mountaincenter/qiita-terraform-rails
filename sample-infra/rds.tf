@@ -1,9 +1,12 @@
+# =============
+# RDS
+# =============
+# DB Subnet Group
 resource "aws_db_subnet_group" "sample_db_subnet_group" {
   name        = "${var.r_prefix}-db-subnet-group"
   description = "${var.r_prefix}-db-subnet-group"
   subnet_ids = [
-    aws_subnet.sample_public_subnet_1a.id,
-    aws_subnet.sample_public_subnet_1c.id
+    for value in aws_subnet.sample_public_subnet : value.id
   ]
 
   tags = {
@@ -11,6 +14,7 @@ resource "aws_db_subnet_group" "sample_db_subnet_group" {
   }
 }
 
+# DB Instance
 resource "aws_db_instance" "sample_db" {
   identifier          = "${var.r_prefix}-db"
   engine              = "mysql"

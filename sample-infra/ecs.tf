@@ -1,7 +1,13 @@
+# ==============
+# ECS Cluster
+# ==============
 resource "aws_ecs_cluster" "sample_cluster" {
   name = "${var.r_prefix}-cluster"
 }
 
+# ===================
+# Task Definitions
+# ===================
 resource "aws_ecs_task_definition" "sample_app_nginx" {
   family                   = "sample-app"
   requires_compatibilities = ["FARGATE"]
@@ -34,8 +40,7 @@ resource "aws_ecs_service" "sample_service" {
 
   network_configuration {
     subnets = [
-      aws_subnet.sample_public_subnet_1a.id,
-      aws_subnet.sample_public_subnet_1c.id
+      for value in aws_subnet.sample_public_subnet : value.id
     ]
     security_groups = [
       aws_security_group.sample_sg_app.id,
