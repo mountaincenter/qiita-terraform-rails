@@ -1,7 +1,6 @@
 name: "Terraform"
 
 on:
-  push:
   workflow_dispatch:
 
 env:
