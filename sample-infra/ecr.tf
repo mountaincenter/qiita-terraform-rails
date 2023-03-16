@@ -9,7 +9,7 @@ resource "aws_ecr_repository" "sample_app" {
 }
 
 resource "aws_ecr_lifecycle_policy" "sample_app_lifecycle_policy" {
-  repository = "${aws_ecr_repository.sample_app.name}"
+  repository = aws_ecr_repository.sample_app.name
 
   policy = <<EOF
   {
@@ -33,7 +33,7 @@ EOF
 
 # Nginx
 resource "aws_ecr_repository" "sample_nginx" {
-  name = "${var.r_prefix}-nginx"
+  name                 = "${var.r_prefix}-nginx"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
