@@ -1,7 +1,13 @@
+# ===========
+# Route53
+# ===========
 data "aws_route53_zone" "naked" {
   name = var.domain_name
 }
 
+# ================
+# Route53 Record
+# ===============
 resource "aws_route53_record" "sample_route53" {
   zone_id = data.aws_route53_zone.naked.zone_id
   name    = var.fqdn_name
@@ -13,12 +19,16 @@ resource "aws_route53_record" "sample_route53" {
   }
 }
 
+# ==================
+# ACM Certificate
+# ==================
+# Certificate
 resource "aws_acm_certificate" "main" {
   domain_name       = var.fqdn_name
   validation_method = "DNS"
 }
 
-
+# Certificate Validation
 resource "aws_acm_certificate_validation" "main" {
   certificate_arn         = aws_acm_certificate.main.arn
   validation_record_fqdns = [for record in aws_route53_record.main_amc_c : record.fqdn]

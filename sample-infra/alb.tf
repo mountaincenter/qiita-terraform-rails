@@ -3,8 +3,7 @@ resource "aws_alb" "sample_alb" {
   security_groups = [aws_security_group.sample_sg_alb.id]
 
   subnets = [
-    "${aws_subnet.sample_public_subnet_1a.id}",
-    "${aws_subnet.sample_public_subnet_1c.id}"
+    for value in aws_subnet.sample_public_subnet : value.id
   ]
 
   internal                   = false
