@@ -16,7 +16,13 @@ resource "aws_ecs_task_definition" "sample_app_nginx" {
   execution_role_arn       = "arn:aws:iam::${var.aws_account_id}:role/ecs-task-role"
   cpu                      = 512
   memory                   = 1024
-  container_definitions    = file("./task-definitions/app-nginx.json")
+  container_definitions = templatefile("./task-definitions/app-nginx.json", {
+    db_host          = aws_db_instance.sample_db.address
+    db_name          = var.database_name
+    db_password      = aws_ssm_parameter.database_password.value
+    db_username      = var.database_username
+    rails_master_key = aws_ssm_parameter.rails_master_key.value
+  })
 }
 
 resource "aws_ecs_service" "sample_service" {
@@ -39,9 +45,10 @@ resource "aws_ecs_service" "sample_service" {
   }
 
   network_configuration {
-    subnets = [
-      for value in aws_subnet.sample_public_subnet : value.id
-    ]
+    # subnets = [
+    #   for value in aws_subnet.sample_public_subnet : value.id
+    # ]
+    subnets = values(aws_subnet.sample_public_subnet)[*].id
     security_groups = [
       aws_security_group.sample_sg_app.id,
       aws_security_group.sample_sg_db.id

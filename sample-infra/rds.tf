@@ -22,9 +22,9 @@ resource "aws_db_instance" "sample_db" {
   instance_class      = "db.t2.micro"
   allocated_storage   = 20
   storage_type        = "gp2"
-  name                = var.database_name
+  db_name             = var.database_name
   username            = var.database_username
-  password            = var.database_password
+  password            = data.aws_kms_secrets.secrets.plaintext["db_password"]
   port                = 3306
   multi_az            = true
   skip_final_snapshot = true

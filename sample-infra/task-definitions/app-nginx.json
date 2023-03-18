@@ -13,19 +13,19 @@
     "environment": [
       {
         "name": "DATABASE_HOST",
-        "value": "sample-db.cbt9oua7na7s.ap-northeast-1.rds.amazonaws.com"
+        "value": "${db_host}"
       },
       {
         "name": "DATABASE_NAME",
-        "value": "sample_app_production"
+        "value": "${db_name}"
       },
       {
         "name": "DATABASE_PASSWORD",
-        "value": "password"
+          "value": "${db_password}"
       },
       {
         "name": "DATABASE_USERNAME",
-        "value": "root"
+        "value": "${db_username}"
       },
       {
         "name": "RAILS_ENV",
@@ -33,7 +33,7 @@
       },
       {
         "name": "RAILS_MASTER_KEY",
-        "value": "sample-db.cbt9oua7na7s.ap-northeast-1.rds.amazonaws.com"
+        "value": "${rails_master_key}"
       },
       {
         "name": "TZ",
