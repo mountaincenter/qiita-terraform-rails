@@ -11,7 +11,7 @@ env:
   # OIDC_ARN: arn:aws:iam::384657981262:role/GithubActionsTestByOIDC
   OIDC_ARN: ${{ secrets.AWS_OIDC_ARN }}
   db_host: ${{ secrets.AWS_DB_HOST }}
-  db_name: "sample_app_productionn"
+  db_name: "sample_app_production"
   db_password: ${{ secrets.AWS_DB_PASSWORD }}
   db_username: "root"
   rails_master_key: ${{ secrets.RAILS_MASTER_KEY }}
