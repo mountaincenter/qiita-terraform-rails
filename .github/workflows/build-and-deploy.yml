@@ -32,7 +32,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: modify task-definition json file
-      run: sed -i 's/${db_username}/${{ env.db_username }}_g' ecs/task-definition.json
+      run: sed -i 's/${db_username}/${{ env.db_username }}/g' ecs/task-definition.json
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
