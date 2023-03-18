@@ -38,7 +38,7 @@
         },
         {
           "name": "DATABASE_USERNAME",
-          "value": "root"
+          "value": "${db_username}"
         },
         {
           "name": "RAILS_ENV",
