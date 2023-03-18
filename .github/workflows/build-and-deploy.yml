@@ -1,6 +1,9 @@
 on:
   push: # 指定したブランチにpushされた際に実行
-    branches: [ main, develop ]
+    branches:
+      - main
+      - develop
+      - 'feat/*'
 
 name: Deploy to Amazon ECS
 
