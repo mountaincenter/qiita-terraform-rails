@@ -8,7 +8,12 @@ on:
 name: Deploy to Amazon ECS
 
 env:
-  OIDC_ARN: arn:aws:iam::384657981262:role/GithubActionsTestByOIDC
+  # OIDC_ARN: arn:aws:iam::384657981262:role/GithubActionsTestByOIDC
+  OIDC_ARN: ${{ secrets.AWS_OIDC_ARN }}
+  ECR_REPOSITORY: "sample-app"
+  CONTINER_NAME: "app"
+  SERVICE: "sample-service"
+  CLUSTER: "sample-cluster"
 
 permissions:
   id-token: write
@@ -49,7 +54,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: sample-app # ECRリポジトリ名
+        ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }} # ECRリポジトリ名
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -f ecs/Dockerfile . -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -61,12 +66,12 @@ jobs:
       uses: aws-actions/amazon-ecs-render-task-definition@v1
       with:
         task-definition: ecs/task-definition.json
-        container-name: app # appコンテナを指定
+        container-name: ${{ env.CONTINER_NAME }} # appコンテナを指定
         image: ${{ steps.build-image.outputs.image }}
 
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
         task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: sample-service
-        cluster: sample-cluster
+        service: ${{ env.SERVICE }}
+        cluster: ${{ env.CLUSTER }}
